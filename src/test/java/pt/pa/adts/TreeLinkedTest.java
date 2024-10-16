@@ -3,6 +3,10 @@ package pt.pa.adts;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class TreeLinkedTest {
@@ -205,5 +209,63 @@ public class TreeLinkedTest {
         assertEquals("O grau de 'Flowers' deveria ser 2.", 2, tree.degree(flowers));
     }
 
+    @Test
+    public void testElementsEmptyTree() {
+        TreeLinked<String> emptyTree = new TreeLinked<>();
+        Iterable<String> elements = emptyTree.elements();
+        assertFalse("A árvore vazia deve retornar uma coleção vazia.", elements.iterator().hasNext());
+    }
 
+    @Test
+    public void testElementsNonEmptyTree() {
+        Iterable<String> elements = tree.elements();
+        List<String> expectedElements = Arrays.asList(
+                "Ecosystem", "Animals", "Mammals", "Humans",
+                "Whales", "Birds", "Eagles", "Parrots",
+                "Plants", "Trees", "Oak", "Pine",
+                "Flowers", "Rose", "Tulip"
+        );
+
+        List<String> actualElements = new ArrayList<>();
+        elements.forEach(actualElements::add);
+
+        assertEquals("Os elementos da árvore devem corresponder ao esperado.", expectedElements, actualElements);
+    }
+
+    @Test
+    public void testChildrenNoChildren() throws InvalidPositionException {
+        // Testar um nó que não tem filhos (por exemplo, "Humans")
+        Position<String> mammals = tree.children(animals).iterator().next(); // "Mammals"
+        Position<String> humans = tree.children(mammals).iterator().next();  // "Humans"
+        Iterable<Position<String>> children = tree.children(humans);
+        assertFalse("Um nó sem filhos deve retornar uma coleção vazia.", children.iterator().hasNext());
+    }
+
+    @Test
+    public void testChildrenWithChildren() throws InvalidPositionException {
+        // Testar um nó que tem filhos (por exemplo, "Animals")
+        Iterable<Position<String>> children = tree.children(animals);
+        List<String> expectedChildren = Arrays.asList("Mammals", "Birds");
+
+        List<String> actualChildren = new ArrayList<>();
+        for (Position<String> child : children) {
+            actualChildren.add(child.element());
+        }
+
+        assertEquals("Os filhos de 'Animals' devem corresponder ao esperado.", expectedChildren, actualChildren);
+    }
+
+    @Test
+    public void testChildrenRoot() throws InvalidPositionException {
+        // Testar os filhos da raiz
+        Iterable<Position<String>> children = tree.children(root);
+        List<String> expectedChildren = Arrays.asList("Animals", "Plants");
+
+        List<String> actualChildren = new ArrayList<>();
+        for (Position<String> child : children) {
+            actualChildren.add(child.element());
+        }
+
+        assertEquals("Os filhos da raiz devem corresponder ao esperado.", expectedChildren, actualChildren);
+    }
 }
