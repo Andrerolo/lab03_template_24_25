@@ -158,5 +158,12 @@ public interface Tree<E> {
    */
   boolean isAncestor(Position<E> lowerItem, Position<E> upperItem);
 
+  /**
+   * metodo degree que devolve o grau de um nó (posição) da árvore.
+   * @param position nó "descendente"
+   * @return boolean indicando se existe uma relação de descendência entre lowerItem e upperItem.
+   */
+  public int degree(Position<E> position) throws InvalidPositionException;
+
 }
 

@@ -276,6 +276,15 @@ public class TreeLinked<E> implements Tree<E> {
         return sb.toString();
     }
 
+    @Override
+    public int degree(Position<E> position) throws InvalidPositionException {
+        // Verificar se a posição é válida
+        TreeNode node = checkPosition(position); // Validar e obter o nó correspondente
+        return node.children.size(); // Retornar o tamanho da lista de filhos do nó
+    }
+
+
+
     /**
      * auxiliary method to format a level of the tree
      */
