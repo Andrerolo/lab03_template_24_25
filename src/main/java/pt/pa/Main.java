@@ -13,58 +13,34 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        /*
-        * Ecosystem
-              -Animals
-                -Mammals
-                  -Humans
-                  -Whales
-                -Birds
-                  -Eagles
-                  -Parrots
-              -Plants
-                -Trees
-                  -Oak
-                  -Pine
-                -Flowers
-                  -Rose
-                  -Tulip
 
-        * */
+        TreeLinked<String> tree;
+        Position<String> root;
 
-        // Criação da instância TreeLinked com a raiz "Ecosystem"
-        TreeLinked<String> tree = new TreeLinked<>("Ecosystem");
+        // Criar a árvore como no método main()
+        tree = new TreeLinked<>("Ecosystem");
+        root = tree.root();
 
-        // Adicionando nós à árvore de acordo com a Figura 1
-        Position<String> root = tree.root();
+        // Adicionando os elementos conforme a nova estrutura desejada
+        Position<String> anchovy = tree.insert(root, "Anchovy");
+        Position<String> tuna = tree.insert(root, "Tuna");
 
-        // Primeiro nível de filhos de "Ecosystem"
-        Position<String> animals = tree.insert(root, "Animals");
-        Position<String> plants = tree.insert(root, "Plants");
+        // Filhos de Tuna
+        Position<String> mackerel = tree.insert(tuna, "Mackerel");
+        Position<String> barracuda = tree.insert(tuna, "Barracuda");
 
-        // Segundo nível - filhos de "Animals"
-        Position<String> mammals = tree.insert(animals, "Mammals");
-        Position<String> birds = tree.insert(animals, "Birds");
+        // Filho de Barracuda
+        tree.insert(barracuda, "Sardine");
 
-        // Segundo nível - filhos de "Plants"
-        Position<String> trees = tree.insert(plants, "Trees");
-        Position<String> flowers = tree.insert(plants, "Flowers");
+        // Filhos de Shark
+        Position<String> shark = tree.insert(root, "Shark");
+        tree.insert(shark, "Dolphin");
 
-        // Terceiro nível - filhos de "Mammals"
-        tree.insert(mammals, "Humans");
-        tree.insert(mammals, "Whales");
-
-        // Terceiro nível - filhos de "Birds"
-        tree.insert(birds, "Eagles");
-        tree.insert(birds, "Parrots");
-
-        // Terceiro nível - filhos de "Trees"
-        tree.insert(trees, "Oak");
-        tree.insert(trees, "Pine");
-
-        // Terceiro nível - filhos de "Flowers"
-        tree.insert(flowers, "Rose");
-        tree.insert(flowers, "Tulip");
+        // Filhos de Eagles
+        Position<String> eagles = tree.insert(root, "Eagles");
+        Position<String> snakes = tree.insert(eagles, "Snakes");
+        tree.insert(eagles, "Rabbits");
+        tree.insert(eagles, "teste");
 
         // Imprimindo a árvore
         System.out.println(tree.toString());

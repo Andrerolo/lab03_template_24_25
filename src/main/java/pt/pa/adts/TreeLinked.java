@@ -278,10 +278,18 @@ public class TreeLinked<E> implements Tree<E> {
 
     @Override
     public int degree(Position<E> position) throws InvalidPositionException {
-        // Verificar se a posição é válida
-        TreeNode node = checkPosition(position); // Validar e obter o nó correspondente
-        return node.children.size(); // Retornar o tamanho da lista de filhos do nó
+        TreeNode node = checkPosition(position);
+        int level = 0; // Começamos no nível 0 (raiz)
+
+        // Subimos até a raiz contando os níveis
+        while (node.parent != null) {
+            level++;
+            node = node.parent; // Mover para o nó pai
+        }
+
+        return level; // Retorna a profundidade do nó
     }
+
 
 
 

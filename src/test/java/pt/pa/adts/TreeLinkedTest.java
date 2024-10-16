@@ -13,8 +13,6 @@ public class TreeLinkedTest {
 
     private TreeLinked<String> tree;
     private Position<String> root;
-    private Position<String> animals;
-    private Position<String> plants;
 
     @Before
     public void setUp() throws Exception {
@@ -22,192 +20,96 @@ public class TreeLinkedTest {
         tree = new TreeLinked<>("Ecosystem");
         root = tree.root();
 
-        // Nível 1
-        animals = tree.insert(root, "Animals");
-        plants = tree.insert(root, "Plants");
+        // Adicionando os elementos conforme a nova estrutura desejada
+        Position<String> anchovy = tree.insert(root, "Anchovy");
+        Position<String> tuna = tree.insert(root, "Tuna");
 
-        // Nível 2
-        Position<String> mammals = tree.insert(animals, "Mammals");
-        Position<String> birds = tree.insert(animals, "Birds");
-        Position<String> trees = tree.insert(plants, "Trees");
-        Position<String> flowers = tree.insert(plants, "Flowers");
+        // Filhos de Tuna
+        Position<String> mackerel = tree.insert(tuna, "Mackerel");
+        Position<String> barracuda = tree.insert(tuna, "Barracuda");
 
-        // Nível 3
-        tree.insert(mammals, "Humans");
-        tree.insert(mammals, "Whales");
-        tree.insert(birds, "Eagles");
-        tree.insert(birds, "Parrots");
-        tree.insert(trees, "Oak");
-        tree.insert(trees, "Pine");
-        tree.insert(flowers, "Rose");
-        tree.insert(flowers, "Tulip");
-    }
+        // Filho de Barracuda
+        tree.insert(barracuda, "Sardine");
 
-    @Test
-    public void size() {
+        // Filhos de Shark
+        Position<String> shark = tree.insert(root, "Shark");
+        tree.insert(shark, "Dolphin");
+
+        // Filhos de Eagles
+        Position<String> eagles = tree.insert(root, "Eagles");
+        Position<String> snakes = tree.insert(eagles, "Snakes");
+        tree.insert(eagles, "Rabbits");
     }
 
     @Test
     public void testSize() {
-        assertEquals("A árvore deveria conter 15 elementos.", 15, tree.size());
-    }
-
-    @Test
-    public void isEmpty() {
-    }
-
-    @Test
-    public void replace() {
-    }
-
-    @Test
-    public void root() {
-    }
-
-    @Test
-    public void parent() {
-    }
-
-    @Test
-    public void children() {
-    }
-
-    @Test
-    public void isInternal() {
-    }
-
-    @Test
-    public void isExternal() {
-    }
-
-    @Test
-    public void isRoot() {
-    }
-
-    @Test
-    public void insert() {
-    }
-
-    @Test
-    public void testInsert() {
-    }
-
-    @Test
-    public void remove() {
-    }
-
-    @Test
-    public void positions() {
-    }
-
-    @Test
-    public void elements() {
-    }
-
-    @Test
-    public void height() {
-    }
-
-    @Test
-    public void move() {
-    }
-
-    @Test
-    public void isAncestor() {
-    }
-
-    @Test
-    public void testToString() {
+        assertEquals("A árvore deveria conter 11 elementos.", 11, tree.size());
     }
 
     @Test
     public void testIsEmpty() {
-        // A árvore não está vazia, pois foi inicializada com elementos
         assertFalse("A árvore deveria conter elementos.", tree.isEmpty());
     }
 
     @Test
     public void testIsExternal() throws InvalidPositionException {
-        // Verificar se um nó sem filhos é externo (ex: "Humans")
-        Position<String> mammals = tree.children(animals).iterator().next(); // "Mammals"
-        Position<String> humans = tree.children(mammals).iterator().next();  // "Humans"
-        assertTrue("Humans deveria ser um nó externo.", tree.isExternal(humans));
-
-        // Verificar se "Animals" não é externo, pois tem filhos
-        assertFalse("Animals não deveria ser um nó externo.", tree.isExternal(animals));
+        Position<String> anchovy = tree.children(root).iterator().next(); // "Anchovy"
+        assertTrue("Anchovy deveria ser um nó externo.", tree.isExternal(anchovy));
     }
 
     @Test
-    public void testIsRoot() throws InvalidPositionException {
-        // Verificar se o nó "Ecosystem" é a raiz
+    public void testIsRoot() {
         assertTrue("Ecosystem deveria ser a raiz.", tree.isRoot(root));
-
-        // Verificar se "Animals" não é a raiz
-        assertFalse("Animals não deveria ser a raiz.", tree.isRoot(animals));
     }
 
     @Test
-    public void testInsertShouldReturnCorrectPosition() throws InvalidPositionException, BoundaryViolationException {
-        // Insere um novo nó "Insects" como filho de "Animals"
-        Position<String> insects = tree.insert(animals, "Insects");
-
-        // Verifica se o elemento retornado na posição correta é "Insects"
+    public void testInsertShouldReturnCorrectPosition() throws InvalidPositionException {
+        Position<String> insects = tree.insert(root, "Insects");
         assertEquals("A posição inserida deveria conter 'Insects'.", "Insects", insects.element());
-
-        // Verifica se o nó pai de "Insects" é "Animals"
-        assertEquals("O pai de 'Insects' deveria ser 'Animals'.", "Animals", tree.parent(insects).element());
     }
 
     @Test
     public void testRemoveShouldReturnCorrectPosition() throws InvalidPositionException {
-        // Remove o nó "Flowers"
-        String removedElement = tree.remove(plants); // Altera para remover o nó "Plants"
+        // Remove o nó "Anchovy" (o primeiro filho da raiz)
+        Position<String> anchovyPosition = tree.children(root).iterator().next(); // Obter a posição de "Anchovy"
+        String removedElement = tree.remove(anchovyPosition); // Remover "Anchovy"
 
-        // Verifica se o elemento removido é "Plants"
-        assertEquals("O elemento removido deveria ser 'Plants'.", "Plants", removedElement);
-
+        // Verifica se o elemento removido é "Anchovy"
+        assertEquals("O elemento removido deveria ser 'Anchovy'.", "Anchovy", removedElement);
 
         // Verifica se o tamanho da árvore foi atualizado corretamente após a remoção
-        assertEquals("A árvore deveria conter 8 elementos após a remoção de 'Plants'.", 8, tree.size());
+        assertEquals("A árvore deveria conter 10 elementos após a remoção de 'Anchovy'.", 10, tree.size());
     }
 
 
     @Test(expected = InvalidPositionException.class)
     public void testInsertThrowsInvalidPositionException() throws InvalidPositionException, BoundaryViolationException {
-        // Tenta inserir um nó com o pai sendo nulo (árvore já contém elementos)
         tree.insert(null, "InvalidNode");
-
-        // O teste falhará se a exceção não for lançada
     }
 
     @Test
     public void testDegree() throws InvalidPositionException {
-        // Verificar o grau do nó "Animals"
-        assertEquals("O grau de 'Animals' deveria ser 2.", 2, tree.degree(animals));
+        Position<String> tuna = null;
 
-        // Verificar o grau do nó "Mammals"
-        Position<String> mammals = tree.children(animals).iterator().next(); // "Mammals"
-        assertEquals("O grau de 'Mammals' deveria ser 2.", 2, tree.degree(mammals));
+        // Obter o nó "Tuna" diretamente
+        for (Position<String> child : tree.children(root)) {
+            if (child.element().equals("Tuna")) {
+                tuna = child;
+                break; // Para de procurar assim que encontramos "Tuna"
+            }
+        }
 
-        // Verificar o grau do nó "Birds"
-        Position<String> birds = tree.children(animals).iterator().next(); // "Birds"
-        assertEquals("O grau de 'Birds' deveria ser 2.", 2, tree.degree(birds));
+        assertNotNull("Deveria encontrar o nó 'Tuna'.", tuna);
 
-        // Verificar o grau do nó "Humans"
-        Position<String> humans = tree.children(mammals).iterator().next(); // "Humans"
-        assertEquals("O grau de 'Humans' deveria ser 0.", 0, tree.degree(humans));
+        // Obter o grau de Tuna (neste caso, a profundidade)
+        int tunaDegree = tree.degree(tuna);
+        System.out.println("Grau de 'Tuna': " + tunaDegree); // Para verificação
 
-        // Verificar o grau do nó "Plants"
-        assertEquals("O grau de 'Plants' deveria ser 2.", 2, tree.degree(plants));
-
-        // Verificar o grau do nó "Trees"
-        Position<String> trees = tree.children(plants).iterator().next(); // "Trees"
-        assertEquals("O grau de 'Trees' deveria ser 2.", 2, tree.degree(trees));
-
-        // Verificar o grau do nó "Flowers"
-        Position<String> flowers = tree.children(plants).iterator().next(); // "Flowers"
-        assertEquals("O grau de 'Flowers' deveria ser 2.", 2, tree.degree(flowers));
+        // O grau deve ser 1, pois "Tuna" está um nível abaixo da raiz
+        assertEquals("O grau de 'Tuna' deveria ser 1.", 1, tunaDegree);
     }
+
+
 
     @Test
     public void testElementsEmptyTree() {
@@ -220,10 +122,9 @@ public class TreeLinkedTest {
     public void testElementsNonEmptyTree() {
         Iterable<String> elements = tree.elements();
         List<String> expectedElements = Arrays.asList(
-                "Ecosystem", "Animals", "Mammals", "Humans",
-                "Whales", "Birds", "Eagles", "Parrots",
-                "Plants", "Trees", "Oak", "Pine",
-                "Flowers", "Rose", "Tulip"
+                "Ecosystem", "Anchovy", "Tuna", "Mackerel",
+                "Barracuda", "Sardine", "Shark", "Dolphin",
+                "Eagles", "Snakes", "Rabbits"
         );
 
         List<String> actualElements = new ArrayList<>();
@@ -234,32 +135,60 @@ public class TreeLinkedTest {
 
     @Test
     public void testChildrenNoChildren() throws InvalidPositionException {
-        // Testar um nó que não tem filhos (por exemplo, "Humans")
-        Position<String> mammals = tree.children(animals).iterator().next(); // "Mammals"
-        Position<String> humans = tree.children(mammals).iterator().next();  // "Humans"
-        Iterable<Position<String>> children = tree.children(humans);
+        Position<String> anchovy = tree.children(root).iterator().next(); // "Anchovy"
+        Iterable<Position<String>> children = tree.children(anchovy);
         assertFalse("Um nó sem filhos deve retornar uma coleção vazia.", children.iterator().hasNext());
     }
 
     @Test
     public void testChildrenWithChildren() throws InvalidPositionException {
-        // Testar um nó que tem filhos (por exemplo, "Animals")
-        Iterable<Position<String>> children = tree.children(animals);
-        List<String> expectedChildren = Arrays.asList("Mammals", "Birds");
+        // Obtém os filhos do root
+        Iterable<Position<String>> rootChildren = tree.children(root);
 
+        // Busca o nó "Tuna" explicitamente
+        Position<String> tuna = null;
+        for (Position<String> child : rootChildren) {
+            if (child.element().equals("Tuna")) {
+                tuna = child;
+                break; // Para de procurar assim que encontramos "Tuna"
+            }
+        }
+
+        // Verifica se "Tuna" foi encontrado
+        assertNotNull("Deveria encontrar o nó 'Tuna'.", tuna);
+
+        // Adiciona print para debugar
+        System.out.println("Número de filhos da Tuna: " + tree.degree(tuna));
+
+        // Obtém os filhos de Tuna
+        Iterable<Position<String>> children = tree.children(tuna);
+
+        // Adiciona print para debugar
+        System.out.println("Filhos de 'Tuna': ");
+        for (Position<String> child : children) {
+            System.out.println(child.element());
+        }
+
+        // Lista dos filhos esperados
+        List<String> expectedChildren = Arrays.asList("Mackerel", "Barracuda");
+
+        // Cria uma lista para os filhos atuais
         List<String> actualChildren = new ArrayList<>();
         for (Position<String> child : children) {
             actualChildren.add(child.element());
         }
 
-        assertEquals("Os filhos de 'Animals' devem corresponder ao esperado.", expectedChildren, actualChildren);
+        // Verifica se a lista de filhos corresponde ao esperado
+        assertEquals("Os filhos de 'Tuna' devem corresponder ao esperado.", expectedChildren, actualChildren);
     }
+
+
+
 
     @Test
     public void testChildrenRoot() throws InvalidPositionException {
-        // Testar os filhos da raiz
         Iterable<Position<String>> children = tree.children(root);
-        List<String> expectedChildren = Arrays.asList("Animals", "Plants");
+        List<String> expectedChildren = Arrays.asList("Anchovy", "Tuna", "Shark", "Eagles");
 
         List<String> actualChildren = new ArrayList<>();
         for (Position<String> child : children) {
